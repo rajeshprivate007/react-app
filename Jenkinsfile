@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git credentialsId: 'git-credentials', branch: 'master', url:'https://github.com/rajeshprivate007/react-app.git'  // Replace with your repo URL
+                git credentialsId: 'git-credentials', url: 'https://github.com/rajeshprivate007/react-app.git'  // Replace with your repo URL
             }
         }
         stage('Install Dependencies') {
