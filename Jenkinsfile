@@ -1,6 +1,9 @@
 pipeline {
     agent any
-    tools { nodejs 'node' }
+    tools { 
+        nodejs 'node' 
+        sonarScanner 'SonarScanner'  // Define SonarScanner tool
+        }
     environment {
         REACT_APP_DIR = "/var/www/react-app"  // Change this path as needed
         SSH_USER = "rajesh" // Change this to your deployment VM user
@@ -17,11 +20,14 @@ pipeline {
                 sh 'npm install'
             }
         }
+        stages {
         stage('SonarQube Analysis') {
-            def scannerHome = tool 'SonarScanner';
-            withSonarQubeEnv() {
-            sh "${scannerHome}/bin/sonar-scanner"
+            steps {
+                withSonarQubeEnv('SonarQube') { // Ensure 'SonarQube' matches the name in Jenkins Global Config
+                    sh "${tool('SonarScanner')}/bin/sonar-scanner"
+                }
             }
+        }
         }
         stage('Build Application') {
             steps {
