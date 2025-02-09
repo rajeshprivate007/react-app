@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git credentialsId: 'git-credentials', branch: 'feature1', url:'https://github.com/rajeshprivate007/react-app.git'  // Replace with your repo URL
+                git credentialsId: 'git-credentials', branch: 'master', url:'https://github.com/rajeshprivate007/react-app.git'  // Replace with your repo URL
             }
         }
         stage('Install Dependencies') {
@@ -18,9 +18,10 @@ pipeline {
             }
         }
         stage('SonarQube Analysis') {
-            steps {
-                    println("SonarQube analysis done")
-                }
+            def scannerHome = tool 'SonarScanner';
+            withSonarQubeEnv() {
+            sh "${scannerHome}/bin/sonar-scanner"
+            }
         }
         stage('Build Application') {
             steps {
